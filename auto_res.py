@@ -27,10 +27,24 @@ def sendGreeting(msg):
   replied.append(msg['FromUserName'])
 
 def getRandomGreeting():
-  response = requests.get("http://www.xjihe.com/api/life/greetings?festival=新年&page=10", headers = {'apiKey':'sQS2ylErlfm9Ao2oNPqw6TqMYbJjbs4g'})
+  response = requests.get("http://www.xjihe.com/api/life/greetings?festival=新年&page=10",
+                          headers={'apiKey': 'sQS2ylErlfm9Ao2oNPqw6TqMYbJjbs4g'})
   results = response.json()['result']
-  greeting = results[random.randrange(len(results))]['words']
+  new_results = []
+
+  for i in range(len(results)):
+    for w in results[i]['words']:
+      for s in w:
+        if s in ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗']:
+          break
+        else:
+          new_results.append(results[i]['words'])
+          break
+
+  # greeting = results[random.randrange(len(results))]['words']
+  greeting = new_results[random.randrange(len(new_results))]
   return greeting
+  
 if __name__ == '__main__':
 
   itchat.auto_login(enableCmdQR=2,hotReload=True)
